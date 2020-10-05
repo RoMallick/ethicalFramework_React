@@ -11,3 +11,19 @@
     background-color: #a9a9a9;
     /* color: #bebebe; */
 }
+
+#option_uno {
+    margin-right: 90%;
+    /* position: absolute;
+    left: 40vh; */
+}
+
+#option_dos {
+    position: absolute;
+    margin-left: 90%;
+    /* right: -20vh; */
+}
+
+.slider {
+    width: 100%;
+}
