@@ -38,9 +38,13 @@ const Layout = ({ children }) => {
             <main>{children}</main>
           </div>
         <footer>
-          © {new Date().getFullYear()}, Built with
+          {/* © {new Date().getFullYear()}, Built with
           {` `}
-          <a href="https://www.gatsbyjs.org">Gatsby</a>
+          <a href="https://www.gatsbyjs.org">Gatsby</a> */}
+
+          © {new Date().getFullYear()}, Built by
+          {` `}
+          <a href="https://rohitmallick.surge.sh" target="_blank">Rohit Mallick</a> 
         </footer>
         </div>
       </div>

@@ -62,17 +62,10 @@ export default class Survey extends Component {
                     <br />
 
                     <div id="options_container">
-                        <div id= "option_uno">  
-                            {this.state.option_uno} 
-                        </div>
-                        <div id= "option_dos"> 
-                            {this.state.option_dos} 
-                        </div>
+                        <p class="option_uno"> {this.state.option_uno} </p>
+                        <p class="option_dos"> {this.state.option_dos} </p>
                     </div>
 
-
-                    {/* <p className= "option_uno"> {this.state.option_uno} </p> */}
-                    {/* <p className= "option_dos"> {this.state.option_dos} </p> */}
                     <br />
                     <br />
 
