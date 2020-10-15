@@ -6,6 +6,8 @@ import React, { Component } from 'react';
 import { Link } from "gatsby";
 import ReactSlider from 'react-slider'
 
+import axios
+
 import './Survey.css'
 
 
@@ -40,6 +42,39 @@ export default class Survey extends Component {
         })
     }
 
+/*
+    // API call axios
+    getReport() {
+        let splitDevice = this.props.currentDevice.split(' : ');
+        axios({
+            method: 'get',
+            url: 'http://54.82.186.170/get_report',
+            params: {
+                'deviceName': splitDevice[1],
+                'location': splitDevice[0],
+                'startTime': 0
+            },
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem('token')}`,
+            },
+        })
+        .then((response) => {
+            var data = [];
+            var x;
+            for(x in response.data.data) {
+                let temp = {
+                    Time: new Date(response.data.data[x].time * 1000).getHours(),
+                    fevers: response.data.data[x].TotalFevers,
+                    people: response.data.data[x].TotalPeople
+                }
+                data.push(temp);
+            }
+            this.setState( {data: data} );
+        }, (error) => {
+            console.log(error);
+        });
+    }
+*/
     handleClick = () => {
         if (count < 7) {
             count++
