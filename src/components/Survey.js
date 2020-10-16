@@ -4,82 +4,79 @@ import React, { Component } from 'react';
 // import { Link } from 'react-router';     
 
 import { Link } from "gatsby";
-import ReactSlider from 'react-slider'
+import axios from 'axios';
 
-import axios
-
-import './Survey.css'
-
+import './Survey.css';
 
 const qtracker = [false, false, false, false, false, false, false];
 let count = 0;
+let flag = true;
 
 export default class Survey extends Component {
-
-    state = {
-        quote: "Welcome to the TRACE Lab Ethical Frameworks Study! \n \
-                In this study you will be presented with a Ethical Dilemma and asked to choose an option on the likert scale that you most agree with.\
-                At the end of the study, you will see a button labeled 'End Session' please click that and read the debriefing form to finish particiating in this study.",
-        option_uno: "Option 1",
-        option_dos: "Option 2",
+    constructor(props) {
+        super(props);
+        this.sliderChange = this.sliderChange.bind(this);
+        this.state = {
+            description: "Welcome to the TRACE Lab Ethical Frameworks Study! \n \
+                    In this study you will be presented with a Ethical Dilemma and asked to choose an option on the likert scale that you most agree with.\
+                    At the end of the study, you will see a button labeled 'End Session' please click that and read the debriefing form to finish particiating in this study.",
+            option_uno: "Option 1",
+            option_dos: "Option 2",
+            data: [],
+            currentQuestion: 0
+        }
     }
 
-    readData = () => {
-        // var data = require('xml-loader!../data/questions.xml');
-        var data = require("xml-loader!../data/dilemmas.xml")
+    
 
-        var rando = 0
-        do {
-            rando = Math.floor(Math.random() * 7)
-        } while (qtracker[rando] == true)
-
-        qtracker[rando] = true
-
-        this.setState({
-            quote: data.QuestionBank.Question[rando].QuestionContent[0],
-            option_uno: data.QuestionBank.Question[rando].OptionContent[0]._,
-            option_dos: data.QuestionBank.Question[rando].OptionContent[1]._,
-        })
-    }
-
-/*
     // API call axios
-    getReport() {
-        let splitDevice = this.props.currentDevice.split(' : ');
+    getQuestions() {
         axios({
             method: 'get',
-            url: 'http://54.82.186.170/get_report',
+            url: 'http://127.0.0.1:5000/get_data',
             params: {
-                'deviceName': splitDevice[1],
-                'location': splitDevice[0],
-                'startTime': 0
             },
             headers: {
-                "Authorization": `Bearer ${localStorage.getItem('token')}`,
+                'Access-Control-Allow-Origin': '*',
             },
         })
         .then((response) => {
-            var data = [];
-            var x;
-            for(x in response.data.data) {
-                let temp = {
-                    Time: new Date(response.data.data[x].time * 1000).getHours(),
-                    fevers: response.data.data[x].TotalFevers,
-                    people: response.data.data[x].TotalPeople
-                }
-                data.push(temp);
-            }
-            this.setState( {data: data} );
+            console.log(response)
+            this.setState( {data: response.data} );
+            console.log(this.state.data[0].Description);
         }, (error) => {
             console.log(error);
         });
     }
-*/
+
+
+    componentDidMount() {
+        this.getQuestions();
+    }
+
     handleClick = () => {
         if (count < 7) {
-            count++
-            this.readData()
-            console.log("count", count)
+            if (flag) {
+                document.getElementById('aggregate_label').removeAttribute('hidden');
+                document.getElementById('ai_label').removeAttribute('hidden');
+
+            } else {
+                count++;
+                this.setState({ 
+                    currentQuestion: count,
+                    description: this.state.data[count].Description,
+                    option_uno: this.state.data[count].Option_0,
+                    option_dos: this.state.data[count].Option_1
+                });
+                document.getElementById('sliderValue').innerHTML = 'Please choose your comfortability';
+                document.getElementById('slider_human').value = 0;
+                document.getElementById('slider_aggregate').value = 0;
+                document.getElementById('slider_ai').value = 0;
+                document.getElementById('aggregate_label').setAttribute('hidden', true);
+                document.getElementById('ai_label').setAttribute('hidden', true);
+            }
+            
+            flag = !flag;
         } else {
             console.log("here")
             document.getElementById("questionbox").style.display =
@@ -89,35 +86,50 @@ export default class Survey extends Component {
         }
     }
 
+    sliderChange() {
+        let value = document.getElementById('slider_aggregate').value;
+        if (value > 0) {
+            document.getElementById('sliderValue').innerHTML = this.state.data[this.state.currentQuestion].Option_1;
+        } else if (value < 0) {
+            document.getElementById('sliderValue').innerHTML = this.state.data[this.state.currentQuestion].Option_0;
+        } else {
+            document.getElementById('sliderValue').innerHTML = 'Please choose your comfortability';
+        }
+
+        // document.getElementById('sliderValue').innerHTML = document.getElementById('slider_human').value;
+        document.getElementById('slider_aggregate').value = document.getElementById('slider_human').value * .5 + document.getElementById('slider_ai').value * .5;
+    }
+
     render () {
         return (
             <div className="QuestionFormat">
                 <div id="questionbox">
-                    <p>{this.state.quote}</p>
+                    <p>{this.state.description}</p>
                     <br />
 
                     <div id="options_container">
-                        <p class="option_uno"> {this.state.option_uno} </p>
-                        <p class="option_dos"> {this.state.option_dos} </p>
+                        <p className="option_uno"> {this.state.option_uno} </p>
+                        <p className="option_dos"> {this.state.option_dos} </p>
                     </div>
 
                     <br />
                     <br />
 
-                    <ReactSlider
-                        className="horizontal-slider"
-                        thumbClassName="example-thumb"
-                        trackClassName="example-track"
-                        renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
-                        renderTrack={(props, state) => <div {...props}>{state.valueNow}</div>}
-                        min= {-50}
-                        max= {50}
-                    />
-
+                    <h1 id='sliderValue'>0</h1>
+                    <label className='sliderLabel'>
+                        Your Response:
+                        <input id='slider_human' className="slider" type="range" onChange={this.sliderChange} defaultValue={0} max={50} min={-50}/>
+                    </label>
                     <br />
+                    <label id='aggregate_label' className='sliderLabel' hidden>
+                        Aggregate Response:
+                        <input id='slider_aggregate' className="slider" type="range" onChange={this.sliderChange} defaultValue={0} max={50} min={-50} disabled/>
+                    </label>
                     <br />
-
-                    <input className= "slider" type="range" defaultValue={0} max={50} min={-50}/>
+                    <label id='ai_label' className='sliderLabel' hidden>
+                        Teammate Response:
+                        <input id='slider_ai' className="slider" type="range" onChange={this.sliderChange} defaultValue={10} max={50} min={-50} disabled/>
+                    </label>
 
                     <br /> 
                     <br />
