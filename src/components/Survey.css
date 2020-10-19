@@ -15,12 +15,15 @@
 .option_uno {
     /* margin-right: 90%; */
     float: left;
-
+    
+    width: 150px;
 }
 
 .option_dos {
     /* margin-left: 90%; */
     float: right;
+
+    width: 150px;
 }
 
 .sliderLabel {

@@ -9,7 +9,7 @@ import axios from 'axios';
 import './Survey.css';
 
 const qtracker = [false, false, false, false, false, false, false];
-let count = 0;
+let dilemmaCount = 0;
 let flag = true;
 
 export default class Survey extends Component {
@@ -54,30 +54,64 @@ export default class Survey extends Component {
         this.getQuestions();
     }
 
+    // handleClick = () => {
+    //     if (dilemmaCount < 7) {
+    //         if (flag) {
+    //             document.getElementById('aggregate_label').removeAttribute('hidden');
+    //             document.getElementById('ai_label').removeAttribute('hidden');
+
+    //         } else {
+    //             dilemmaCount++;
+    //             this.setState({ 
+    //                 currentQuestion: dilemmaCount,
+    //                 description: this.state.data[dilemmaCount].Description,
+    //                 option_uno: this.state.data[dilemmaCount].Option_0,
+    //                 option_dos: this.state.data[dilemmaCount].Option_1
+    //             });
+    //             document.getElementById('sliderValue').innerHTML = 'Indifferent';
+    //             document.getElementById('slider_human').value = 0;
+    //             document.getElementById('slider_aggregate').value = 0;
+    //             document.getElementById('slider_ai').value = 0;
+    //             document.getElementById('aggregate_label').setAttribute('hidden', true);
+    //             document.getElementById('ai_label').setAttribute('hidden', true);
+    //         }
+            
+    //         flag = !flag;
+    //     } 
+    //     else {
+    //         console.log("here")
+    //         document.getElementById("questionbox").style.display =
+    //         "none"
+    //         document.getElementById("thankyoubox").style.display =
+    //         "block"
+    //     }
+    // }
+
     handleClick = () => {
-        if (count < 7) {
-            if (flag) {
+        if (dilemmaCount < 15) {
+            if ((dilemmaCount % 2) == 0) {
                 document.getElementById('aggregate_label').removeAttribute('hidden');
                 document.getElementById('ai_label').removeAttribute('hidden');
 
-            } else {
-                count++;
+            } else if ((dilemmaCount % 2) == 1) {
+                // count++;
                 this.setState({ 
                     currentQuestion: count,
-                    description: this.state.data[count].Description,
-                    option_uno: this.state.data[count].Option_0,
-                    option_dos: this.state.data[count].Option_1
+                    description: this.state.data[Math.ceil(dilemmaCount / 2)].Description,
+                    option_uno: this.state.data[Math.ceil(dilemmaCount / 2)].Option_0,
+                    option_dos: this.state.data[Math.ceil(dilemmaCount / 2)].Option_1
                 });
-                document.getElementById('sliderValue').innerHTML = 'Please choose your comfortability';
+                document.getElementById('sliderValue').innerHTML = 'Indifferent';
                 document.getElementById('slider_human').value = 0;
                 document.getElementById('slider_aggregate').value = 0;
                 document.getElementById('slider_ai').value = 0;
                 document.getElementById('aggregate_label').setAttribute('hidden', true);
                 document.getElementById('ai_label').setAttribute('hidden', true);
             }
-            
-            flag = !flag;
-        } else {
+            dilemmaCount++;
+            // flag = !flag;
+        } 
+        else {
             console.log("here")
             document.getElementById("questionbox").style.display =
             "none"
@@ -93,9 +127,9 @@ export default class Survey extends Component {
         } else if (value < 0) {
             document.getElementById('sliderValue').innerHTML = this.state.data[this.state.currentQuestion].Option_0;
         } else {
-            document.getElementById('sliderValue').innerHTML = 'Please choose your comfortability';
+            document.getElementById('sliderValue').innerHTML = 'Indifferent';
         }
-
+    
         // document.getElementById('sliderValue').innerHTML = document.getElementById('slider_human').value;
         document.getElementById('slider_aggregate').value = document.getElementById('slider_human').value * .5 + document.getElementById('slider_ai').value * .5;
     }
@@ -114,8 +148,9 @@ export default class Survey extends Component {
 
                     <br />
                     <br />
+                    <br />
 
-                    <h1 id='sliderValue'>0</h1>
+                    <h1 id='sliderValue' className='sliderValue'>Indifferent</h1>
                     <label className='sliderLabel'>
                         Your Response:
                         <input id='slider_human' className="slider" type="range" onChange={this.sliderChange} defaultValue={0} max={50} min={-50}/>
@@ -128,7 +163,7 @@ export default class Survey extends Component {
                     <br />
                     <label id='ai_label' className='sliderLabel' hidden>
                         Teammate Response:
-                        <input id='slider_ai' className="slider" type="range" onChange={this.sliderChange} defaultValue={10} max={50} min={-50} disabled/>
+                        <input id='slider_ai' className="slider" type="range" onChange={this.sliderChange} defaultValue={0} max={50} min={-50} disabled/>
                     </label>
 
                     <br /> 

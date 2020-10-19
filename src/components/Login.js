@@ -23,7 +23,7 @@ export class Login extends Component {
                 <div className="login-component">
                     {/* <SEO title="Login" /> */}
                     <label id="pidlabel">Participant ID: </label>
-                    <input type="text" id="pid" name="pid" defaultValue=' ' ></input>
+                    <input className= "pid" type="text" id="pid" name="pid" defaultValue=' ' ></input>
                     <br />
                     <br />
                     <button onClick={this.storeId} className="button">Login</button>
