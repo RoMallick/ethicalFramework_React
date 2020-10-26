@@ -44,7 +44,7 @@ const Layout = ({ children }) => {
 
           © {new Date().getFullYear()}, Built by
           {` `}
-          <a href="https://computing.clemson.edu/trace/index.html" target="_blank">TRACE Research Group</a> 
+          <a href="https://computing.clemson.edu/trace/index.html" target="_blank">TRACE</a> 
         </footer>
         </div>
       </div>

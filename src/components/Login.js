@@ -13,7 +13,7 @@ export class Login extends Component {
     
     storeId() {
         localStorage.setItem('pid', document.getElementById('pid').value);
-        document.location.href = '/Survey';
+        document.location.href = '/Training';
     }
 
     render() {

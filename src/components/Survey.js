@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-// TODO: Fix linking pages with each other. Only the link func from gatsby works. This react-router doesn't want to work. 
 // import { Link } from 'react-router';     
 
 import { Link } from "gatsby";
@@ -10,96 +9,83 @@ import './Survey.css';
 
 const qtracker = [false, false, false, false, false, false, false];
 let dilemmaCount = 0;
-let flag = true;
 
 export default class Survey extends Component {
     constructor(props) {
         super(props);
+        this.getQuestions();
         this.sliderChange = this.sliderChange.bind(this);
         this.state = {
-            description: "Welcome to the TRACE Lab Ethical Frameworks Study! \n \
-                    In this study you will be presented with a Ethical Dilemma and asked to choose an option on the likert scale that you most agree with.\
-                    At the end of the study, you will see a button labeled 'End Session' please click that and read the debriefing form to finish particiating in this study.",
-            option_uno: "Option 1",
-            option_dos: "Option 2",
+            description: "",
+            option_uno: "",
+            option_dos: "",
             data: [],
             currentQuestion: 0
         }
     }
 
-    
-
-    // API call axios
+    // API get call axios
     getQuestions() {
         axios({
             method: 'get',
-            url: 'http://127.0.0.1:5000/get_data',
+            url: 'http://127.0.0.1:5000/get_dilemma',
             params: {
+                'pid': localStorage.getItem('pid')
             },
             headers: {
                 'Access-Control-Allow-Origin': '*',
             },
         })
         .then((response) => {
-            console.log(response)
-            this.setState( {data: response.data} );
-            console.log(this.state.data[0].Description);
+            console.log(response.data['Option_0'])
+            this.setState( {data: response.data});
         }, (error) => {
             console.log(error);
         });
     }
 
+    // API post call axios
+    postResponse() {
+        axios({
+            method: 'post',
+            url: 'http://127.0.0.1:5000/post_response',
+            params: {
+                'pid': localStorage.getItem('pid'),
+                'qNum': this.currentQuestion,
+                'qid': this.state.data['id'],
+                'humanSliderPos': document.getElementById('slider_human').value,
+                'aggregateSliderPos': document.getElementById('slider_aggregate').value,
+                'aiSliderPos': document.getElementById('slider_ai').value
+            },
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+            },
+        })
+        .then((response) => {
+            if(response.data === 'Data recorded') {
 
-    componentDidMount() {
-        this.getQuestions();
+            } else {
+                this.setState({data: response.data});
+            }
+        }, (error) => {
+            console.log(error);
+        });
     }
-
-    // handleClick = () => {
-    //     if (dilemmaCount < 7) {
-    //         if (flag) {
-    //             document.getElementById('aggregate_label').removeAttribute('hidden');
-    //             document.getElementById('ai_label').removeAttribute('hidden');
-
-    //         } else {
-    //             dilemmaCount++;
-    //             this.setState({ 
-    //                 currentQuestion: dilemmaCount,
-    //                 description: this.state.data[dilemmaCount].Description,
-    //                 option_uno: this.state.data[dilemmaCount].Option_0,
-    //                 option_dos: this.state.data[dilemmaCount].Option_1
-    //             });
-    //             document.getElementById('sliderValue').innerHTML = 'Indifferent';
-    //             document.getElementById('slider_human').value = 0;
-    //             document.getElementById('slider_aggregate').value = 0;
-    //             document.getElementById('slider_ai').value = 0;
-    //             document.getElementById('aggregate_label').setAttribute('hidden', true);
-    //             document.getElementById('ai_label').setAttribute('hidden', true);
-    //         }
-            
-    //         flag = !flag;
-    //     } 
-    //     else {
-    //         console.log("here")
-    //         document.getElementById("questionbox").style.display =
-    //         "none"
-    //         document.getElementById("thankyoubox").style.display =
-    //         "block"
-    //     }
-    // }
 
     handleClick = () => {
         if (dilemmaCount < 15) {
-            if ((dilemmaCount % 2) == 0) {
+            if ((dilemmaCount % 2) === 0) {                        // Only show Human slider
                 document.getElementById('aggregate_label').removeAttribute('hidden');
                 document.getElementById('ai_label').removeAttribute('hidden');
-
-            } else if ((dilemmaCount % 2) == 1) {
-                // count++;
+                
+            } else if ((dilemmaCount % 2) === 1) {                 // Show AI and Aggregate slider with human 
+                this.getQuestions();
+                this.postResponse();
                 this.setState({ 
-                    currentQuestion: count,
-                    description: this.state.data[Math.ceil(dilemmaCount / 2)].Description,
-                    option_uno: this.state.data[Math.ceil(dilemmaCount / 2)].Option_0,
-                    option_dos: this.state.data[Math.ceil(dilemmaCount / 2)].Option_1
+                    currentQuestion: Math.floor(dilemmaCount / 2),
+                    description: this.state.data['Description'],
+                    option_uno: this.state.data['Option_0'],
+                    option_dos: this.state.data['Option_1']
                 });
                 document.getElementById('sliderValue').innerHTML = 'Indifferent';
                 document.getElementById('slider_human').value = 0;
@@ -109,7 +95,6 @@ export default class Survey extends Component {
                 document.getElementById('ai_label').setAttribute('hidden', true);
             }
             dilemmaCount++;
-            // flag = !flag;
         } 
         else {
             console.log("here")
@@ -118,14 +103,15 @@ export default class Survey extends Component {
             document.getElementById("thankyoubox").style.display =
             "block"
         }
+        console.log(dilemmaCount)
     }
 
     sliderChange() {
         let value = document.getElementById('slider_aggregate').value;
         if (value > 0) {
-            document.getElementById('sliderValue').innerHTML = this.state.data[this.state.currentQuestion].Option_1;
+            document.getElementById('sliderValue').innerHTML = this.state.data['Option_1'];
         } else if (value < 0) {
-            document.getElementById('sliderValue').innerHTML = this.state.data[this.state.currentQuestion].Option_0;
+            document.getElementById('sliderValue').innerHTML = this.state.data['Option_0'];
         } else {
             document.getElementById('sliderValue').innerHTML = 'Indifferent';
         }
@@ -138,12 +124,12 @@ export default class Survey extends Component {
         return (
             <div className="QuestionFormat">
                 <div id="questionbox">
-                    <p>{this.state.description}</p>
+                    <p> {this.state.data['Description']} </p>
                     <br />
 
                     <div id="options_container">
-                        <p className="option_uno"> {this.state.option_uno} </p>
-                        <p className="option_dos"> {this.state.option_dos} </p>
+                        <p className="option_uno"> {this.state.data['Option_0']} </p>
+                        <p className="option_dos"> {this.state.data['Option_1']} </p>
                     </div>
 
                     <br />
@@ -166,7 +152,7 @@ export default class Survey extends Component {
                         <input id='slider_ai' className="slider" type="range" onChange={this.sliderChange} defaultValue={0} max={50} min={-50} disabled/>
                     </label>
 
-                    <br /> 
+                    <br />
                     <br />
                     <button id="clickme" onClick={this.handleClick}>
                     Submit
