@@ -1,9 +1,12 @@
-import React, { Component } from 'react';
-
+import React, { Component, useState } from 'react';
+// import Modal from 'react-bootstrap/Modal';
+import Modal from 'react-modal';
 // import { Link } from 'react-router';     
 
 import { Link } from "gatsby";
 import axios from 'axios';
+
+import Popup from './Popup';
 
 import './Survey.css';
 
@@ -77,7 +80,7 @@ export default class Survey extends Component {
             if ((dilemmaCount % 2) === 0) {                        // Only show Human slider
                 document.getElementById('aggregate_label').removeAttribute('hidden');
                 document.getElementById('ai_label').removeAttribute('hidden');
-                
+
             } else if ((dilemmaCount % 2) === 1) {                 // Show AI and Aggregate slider with human 
                 this.getQuestions();
                 this.postResponse();
@@ -135,6 +138,14 @@ export default class Survey extends Component {
                     <br />
                     <br />
                     <br />
+
+                    {/* <button onClick={toggleModal}>Open modal</button> */}
+                    <Popup></Popup>
+
+                    <br />
+                    <br />
+                    <br />
+
 
                     <h1 id='sliderValue' className='sliderValue'>Indifferent</h1>
                     <label className='sliderLabel'>
