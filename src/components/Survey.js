@@ -37,7 +37,8 @@ export default class Survey extends Component {
             method: 'get',
             url: 'http://127.0.0.1:5000/get_dilemma',
             params: {
-                'pid': localStorage.getItem('pid')
+                'pid': localStorage.getItem('pid'),
+                'condition': localStorage.getItem('condition')
             },
             headers: {
                 'Access-Control-Allow-Origin': '*',
