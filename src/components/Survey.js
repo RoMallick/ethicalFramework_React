@@ -74,10 +74,11 @@ export default class Survey extends Component {
             },
         })
         .then((response) => {
-            if(response.data === 'Data recorded') {
+            console.log(response);
+            if(response.data.data === 'Data recorded') {
 
             } else {
-                this.setState({data: response.data});
+                this.setState({data: response.data.data});
             }
         }, (error) => {
             console.log(error);
@@ -86,12 +87,12 @@ export default class Survey extends Component {
 
     handleClick = () => {
         if (dilemmaCount < 15) {
+            this.postResponse();
             if ((dilemmaCount % 2) === 0) {                        // Only show Human slider
                 document.getElementById('aggregate_label').removeAttribute('hidden');
                 document.getElementById('ai_label').removeAttribute('hidden');
 
             } else if ((dilemmaCount % 2) === 1) {                 // Show AI and Aggregate slider with human 
-                this.postResponse();
                 this.setState({ 
                     currentQuestion: Math.floor(dilemmaCount / 2),
                     description: this.state.data['Description'],

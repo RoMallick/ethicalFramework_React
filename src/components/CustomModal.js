@@ -44,7 +44,7 @@ function CustomModal() {
                 <div>Ruleset : </div>
                 {this.props.ruleset.map((item, index) => (
                     <Item key={index} item={item} />
-                    ))}
+                ))}
                 <button onClick={closeModal}>close</button>
             </Modal>
         </div>
