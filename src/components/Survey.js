@@ -36,7 +36,7 @@ export default class Survey extends Component {
     getQuestions() {
         axios({
             method: 'get',
-            url: 'http://127.0.0.1:5000/get_dilemma',
+            url: 'http://99.5.126.227:5000/get_dilemma',
             params: {
                 'pid': localStorage.getItem('pid'),
                 'condition': localStorage.getItem('condition')
@@ -59,7 +59,7 @@ export default class Survey extends Component {
     postResponse() {
         axios({
             method: 'post',
-            url: 'http://127.0.0.1:5000/post_response',
+            url: 'http://99.5.126.227:5000/post_response',
             params: {
                 'pid': localStorage.getItem('pid'),
                 'condition': localStorage.getItem('condition'),
