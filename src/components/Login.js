@@ -10,7 +10,19 @@ export class Login extends Component {
         super(props);
     }
 
-    
+    componentWillMount() {
+        let params = new URLSearchParams(document.location.search.substring(1));
+
+        console.log(params.get('id'));
+        console.log(params.get('condition'));
+        localStorage.setItem('pid', params.get('id'));
+        localStorage.setItem('condition', params.get('condition'));
+    }
+
+    componentDidMount() {
+        document.location.href = '/Training';
+    }
+
     storeId() {
         localStorage.setItem('pid', document.getElementById('pid').value);
         document.location.href = '/Training';
@@ -21,12 +33,7 @@ export class Login extends Component {
             <div>
                 <img src={TRACEimg} className="traceimg"/>
                 <div className="login-component">
-                    {/* <SEO title="Login" /> */}
-                    <label id="pidlabel">Participant ID: </label>
-                    <input className= "pid" type="text" id="pid" name="pid" defaultValue=' ' ></input>
-                    <br />
-                    <br />
-                    <button onClick={this.storeId} className="button">Login</button>
+                    <div>Redirecting...</div>
                 </div>
             </div>
         )

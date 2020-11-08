@@ -1,6 +1,6 @@
 import React, { Component, useState } from 'react';
-// import Modal from 'react-bootstrap/Modal';
-import Modal from 'react-modal';
+import ReactDOM from 'react-dom';
+import CustomModal from './CustomModal.js';
 // import { Link } from 'react-router';     
 
 import { Link } from "gatsby";
@@ -16,7 +16,7 @@ let dilemmaCount = 0;
 export default class Survey extends Component {
     constructor(props) {
         super(props);
-        this.getQuestions();
+        this.getQuestions = this.getQuestions.bind(this);
         this.sliderChange = this.sliderChange.bind(this);
         this.state = {
             description: "",
@@ -25,6 +25,10 @@ export default class Survey extends Component {
             data: [],
             currentQuestion: 0
         }
+    }
+
+    componentWillMount() {
+        this.getQuestions();
     }
 
     // API get call axios
@@ -40,7 +44,8 @@ export default class Survey extends Component {
             },
         })
         .then((response) => {
-            console.log(response.data['Option_0'])
+            console.log(response.data);
+            // TODO: check that the ruleset makes it here from the flaskapp
             this.setState( {data: response.data});
         }, (error) => {
             console.log(error);
@@ -54,6 +59,7 @@ export default class Survey extends Component {
             url: 'http://127.0.0.1:5000/post_response',
             params: {
                 'pid': localStorage.getItem('pid'),
+                'condition': localStorage.getItem('condition'),
                 'qNum': this.currentQuestion,
                 'qid': this.state.data['id'],
                 'humanSliderPos': document.getElementById('slider_human').value,
@@ -82,7 +88,6 @@ export default class Survey extends Component {
                 document.getElementById('ai_label').removeAttribute('hidden');
 
             } else if ((dilemmaCount % 2) === 1) {                 // Show AI and Aggregate slider with human 
-                this.getQuestions();
                 this.postResponse();
                 this.setState({ 
                     currentQuestion: Math.floor(dilemmaCount / 2),
@@ -106,7 +111,7 @@ export default class Survey extends Component {
             document.getElementById("thankyoubox").style.display =
             "block"
         }
-        console.log(dilemmaCount)
+        console.log(dilemmaCount);
     }
 
     sliderChange() {
@@ -138,9 +143,13 @@ export default class Survey extends Component {
                     <br />
                     <br />
                     <br />
-
-                    {/* <button onClick={toggleModal}>Open modal</button> */}
-                    <Popup></Popup>
+                    <br />
+                    <br />
+                    <br />
+                    
+                    <CustomModal
+                        //ruleSet = {this.state.data.ruleset}
+                    ></CustomModal>
 
                     <br />
                     <br />

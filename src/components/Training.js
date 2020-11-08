@@ -3,6 +3,8 @@ import { Link } from "gatsby";
 
 import './Survey.css';
 
+import CustomModal from './CustomModal.js';
+
 let clickCount = 0;
 
 export default class Training extends Component {
@@ -13,7 +15,10 @@ export default class Training extends Component {
             description: "Welcome to the TRACE Lab Ethical Frameworks Study! \n \
                     In this study you will be presented with a Ethical Dilemma and asked to choose an option on the likert scale that you most agree with.\
                     At the end of the study, you will see a button labeled 'End Session' please click that and read the debriefing form to finish particiating in this study.",
-            option_uno: "Option 1",
+                    "Welcome to the TRACE Research Group Ethical Frameworks Study! \n \
+                    In this study you will be presented "
+            
+                    option_uno: "Option 1",
             option_dos: "Option 2",
             data: {
                 'Option_0': "Option 1",
@@ -70,6 +75,15 @@ export default class Training extends Component {
                         <p className="option_uno"> {this.state.option_uno} </p>
                         <p className="option_dos"> {this.state.option_dos} </p>
                     </div>
+
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    
+                    <CustomModal></CustomModal>
 
                     <br />
                     <br />
