@@ -13,9 +13,6 @@ const customStyles = {
     }
 };
 
-// Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
-//Modal.setAppElement('#root')
-
 function CustomModal() {
     var subtitle;
     const [modalIsOpen, setIsOpen] = React.useState(false);
@@ -44,19 +41,13 @@ function CustomModal() {
             >
 
                 <h2 ref={_subtitle => (subtitle = _subtitle)}>RuleSet</h2>
-                {/* <button onClick={closeModal}>close</button> */}
                 <div>Ruleset : </div>
-                <form>
-                    {/* <input /> */}
-                    {/* <button>tab navigation</button> */}
-                    {/* <button>stays</button>
-                    <button>inside</button>
-                    <button>the modal</button> */}
-                </form>
+                {this.props.ruleset.map((item, index) => (
+                    <Item key={index} item={item} />
+                    ))}
                 <button onClick={closeModal}>close</button>
             </Modal>
         </div>
     );
 }
 export default CustomModal;
-// ReactDOM.render(<App />, appElement);

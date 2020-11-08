@@ -1,7 +1,7 @@
 import React, { Component, useState } from 'react';
 import ReactDOM from 'react-dom';
 import CustomModal from './CustomModal.js';
-// import { Link } from 'react-router';     
+// import { Link } from 'react-router';
 
 import { Link } from "gatsby";
 import axios from 'axios';
@@ -23,7 +23,8 @@ export default class Survey extends Component {
             option_uno: "",
             option_dos: "",
             data: [],
-            currentQuestion: 0
+            currentQuestion: 0,
+            ruleset: []
         }
     }
 
@@ -47,7 +48,8 @@ export default class Survey extends Component {
         .then((response) => {
             console.log(response.data);
             // TODO: check that the ruleset makes it here from the flaskapp
-            this.setState( {data: response.data});
+            this.setState( {data: response.data.data});
+            this.setState( {ruleset: response.data.ruleset});
         }, (error) => {
             console.log(error);
         });
@@ -149,7 +151,7 @@ export default class Survey extends Component {
                     <br />
                     
                     <CustomModal
-                        //ruleSet = {this.state.data.ruleset}
+                        {...this.state}
                     ></CustomModal>
 
                     <br />
@@ -160,17 +162,17 @@ export default class Survey extends Component {
                     <h1 id='sliderValue' className='sliderValue'>Indifferent</h1>
                     <label className='sliderLabel'>
                         Your Response:
-                        <input id='slider_human' className="slider" type="range" onChange={this.sliderChange} defaultValue={0} max={50} min={-50}/>
+                        <input id='slider_human' className="slider" type="range" onClick={this.sliderChange} onChange={this.sliderChange} defaultValue={0} max={50} min={-50}/>
                     </label>
                     <br />
                     <label id='aggregate_label' className='sliderLabel' hidden>
                         Aggregate Response:
-                        <input id='slider_aggregate' className="slider" type="range" onChange={this.sliderChange} defaultValue={0} max={50} min={-50} disabled/>
+                        <input id='slider_aggregate' className="slider" type="range" onClick={this.sliderChange} onChange={this.sliderChange} defaultValue={0} max={50} min={-50} disabled/>
                     </label>
                     <br />
                     <label id='ai_label' className='sliderLabel' hidden>
                         Teammate Response:
-                        <input id='slider_ai' className="slider" type="range" onChange={this.sliderChange} defaultValue={0} max={50} min={-50} disabled/>
+                        <input id='slider_ai' className="slider" type="range" onClick={this.sliderChange} onChange={this.sliderChange} defaultValue={0} max={50} min={-50} disabled/>
                     </label>
 
                     <br />

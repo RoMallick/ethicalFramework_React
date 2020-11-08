@@ -15,10 +15,10 @@ export default class Training extends Component {
             description: "Welcome to the TRACE Lab Ethical Frameworks Study! \n \
                     In this study you will be presented with a Ethical Dilemma and asked to choose an option on the likert scale that you most agree with.\
                     At the end of the study, you will see a button labeled 'End Session' please click that and read the debriefing form to finish particiating in this study.",
-                    "Welcome to the TRACE Research Group Ethical Frameworks Study! \n \
-                    In this study you will be presented "
+                    // "Welcome to the TRACE Research Group Ethical Frameworks Study! \n \
+                    // "In this study you will be presented "
             
-                    option_uno: "Option 1",
+            option_uno: "Option 1",
             option_dos: "Option 2",
             data: {
                 'Option_0': "Option 1",
