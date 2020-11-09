@@ -12,11 +12,14 @@ export default class Training extends Component {
         super(props);
         this.sliderChange = this.sliderChange.bind(this);
         this.state = {
-            description: "Welcome to the TRACE Lab Ethical Frameworks Study! \n \
-                    In this study you will be presented with a Ethical Dilemma and asked to choose an option on the likert scale that you most agree with.\
-                    At the end of the study, you will see a button labeled 'End Session' please click that and read the debriefing form to finish particiating in this study.",
-                    // "Welcome to the TRACE Research Group Ethical Frameworks Study! \n \
-                    // "In this study you will be presented "
+            description: 
+                    "Welcome to the TRACE Research Group Ethical Frameworks Study! \
+                    In this study you will be presented with an Ethical Dilemma and will be asked to use the slider provided to demonstrate the degree of which option you agree with most. \
+                    Please note that there are no right answers and that as you deviate from the middle, your preference gets stronger for that designated option. \
+                    After hitting submit once, the AI agent will then make its decision through its designated slider. The aggregate of your two decisions will influence the final decision made in that scenario. \
+                    For further clarification, there is a dynamic text box that changes with the aggregate slider decision. During this time you are free to change your answer to influence the aggregate. \
+                    Once you are satisfied please hit the submit button again to move on to the next dilemma. Please note that you cannot move the AI or aggregate sliders, just your designated slider. \
+                    At the end of the study, you will see a debriefing form. Once read, please go back to the survey in qualtrics. This training page allows you to get a feel for the study. Please hit “Start Session” when you are ready to begin.",
             
             option_uno: "Option 1",
             option_dos: "Option 2",

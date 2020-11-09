@@ -6,8 +6,6 @@ import CustomModal from './CustomModal.js';
 import { Link } from "gatsby";
 import axios from 'axios';
 
-import Popup from './Popup';
-
 import './Survey.css';
 
 const qtracker = [false, false, false, false, false, false, false];
