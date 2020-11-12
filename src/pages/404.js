@@ -8,7 +8,7 @@ const NotFoundPage = () => (
     <SEO title="404: Not found" />
     <h1>NOT FOUND</h1>
     <p>You just hit a route that doesn&#39;t exist.</p>
-    <p>Please click "Ethical Frameworks Study" in the header to go back to the login page to try again.</p>
+    <p>Please exit this current page and click the link in your qualtrics again to restart the study.</p>
     {/* <Link to="/">Go back to the homepage</Link> */}
   </Layout>
 )

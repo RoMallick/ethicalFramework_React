@@ -17,7 +17,7 @@ const Debrief = () => {
 
                 <br />
 
-                <h1>Attitudes About Technology and Team Performance</h1>
+                <h2>Attitudes About Technology and Team Performance</h2>
 
                 <p>
                     Thank you for taking part in this study. You may have been told at the beginning of the experimental task that one of your teammates was an automated bot.
@@ -32,9 +32,13 @@ const Debrief = () => {
                 <br />
 
                 <p>
-                    Please remember that some of your classmates may also be signed up for this study. If they knew that their agent may be different, they may try to determine the specific framework used which could lead to bias.
+                    Please remember that someone you know may also be signed up for this study. If they knew that their agent may be different, they may try to determine the specific framework used which could lead to bias.
                     Therefore, we would appreciate it if you would not share this additional information with others who may be taking part in this study.
                 </p>
+
+                <br />
+
+                <h2>Please go back to the qualtrics webpage and enter the password : "ethpass404" to finish the survey.</h2>
             </Layout>
         </div>
     )

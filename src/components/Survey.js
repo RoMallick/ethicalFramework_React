@@ -8,6 +8,7 @@ import axios from 'axios';
 
 import './Survey.css';
 
+
 const qtracker = [false, false, false, false, false, false, false];
 let dilemmaCount = 0;
 
@@ -18,11 +19,14 @@ export default class Survey extends Component {
         this.sliderChange = this.sliderChange.bind(this);
         this.state = {
             description: "",
+            summary: "",
             option_uno: "",
             option_dos: "",
             data: [],
             currentQuestion: 0,
-            ruleset: []
+            ruleset: [],
+            ai: 0,
+            apiReturned: false
         }
     }
 
@@ -55,6 +59,7 @@ export default class Survey extends Component {
 
     // API post call axios
     postResponse() {
+        console.log('post response');
         axios({
             method: 'post',
             url: 'http://99.5.126.227:5000/post_response',
@@ -74,19 +79,32 @@ export default class Survey extends Component {
         .then((response) => {
             console.log(response);
             if(response.data.data === 'Data recorded') {
-
+                this.setState({ai: ((response.data.ai * 100) - 50)});
+                console.log(this.state.ai)
             } else {
                 this.setState({data: response.data.data});
             }
+            this.handleClick2();
         }, (error) => {
             console.log(error);
         });
     }
 
     handleClick = () => {
-        if (dilemmaCount < 15) {
+        if (dilemmaCount < 21) {
             this.postResponse();
+        } else {
+            this.handleClick2();
+        }
+    }
+
+    handleClick2 = () => {
+        console.log('Dilemma Count' + dilemmaCount);
+        if (dilemmaCount < 21) {
             if ((dilemmaCount % 2) === 0) {                        // Only show Human slider
+                console.log("AI slider updated and unhidden");
+                document.getElementById('slider_ai').value = this.state.ai;
+                this.sliderChange();
                 document.getElementById('aggregate_label').removeAttribute('hidden');
                 document.getElementById('ai_label').removeAttribute('hidden');
 
@@ -117,6 +135,7 @@ export default class Survey extends Component {
     }
 
     sliderChange() {
+        document.getElementById('slider_aggregate').value = document.getElementById('slider_human').value * .5 + document.getElementById('slider_ai').value * .5;
         let value = document.getElementById('slider_aggregate').value;
         if (value > 0) {
             document.getElementById('sliderValue').innerHTML = this.state.data['Option_1'];
@@ -127,7 +146,6 @@ export default class Survey extends Component {
         }
     
         // document.getElementById('sliderValue').innerHTML = document.getElementById('slider_human').value;
-        document.getElementById('slider_aggregate').value = document.getElementById('slider_human').value * .5 + document.getElementById('slider_ai').value * .5;
     }
 
     render () {
@@ -147,16 +165,6 @@ export default class Survey extends Component {
                     <br />
                     <br />
                     <br />
-                    <br />
-                    
-                    <CustomModal
-                        {...this.state}
-                    ></CustomModal>
-
-                    <br />
-                    <br />
-                    <br />
-
 
                     <h1 id='sliderValue' className='sliderValue'>Indifferent</h1>
                     <label className='sliderLabel'>
@@ -176,9 +184,17 @@ export default class Survey extends Component {
 
                     <br />
                     <br />
-                    <button id="clickme" onClick={this.handleClick}>
-                    Submit
-                    </button>
+
+                    <div id="buttonContainer">
+                        <button className="submitBtn" onClick={this.handleClick}>
+                            Submit
+                        </button>
+
+                        <CustomModal
+                            ruleset={this.state.ruleset}
+                        className="customModal"></CustomModal>
+                    </div>
+
                 </div>
                 <div id="thankyoubox" style={{ display: "none" }}>
                     Thank you for participating!!
